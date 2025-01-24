@@ -9,8 +9,12 @@ const searchParam = ref('')
 
 const sendMessage = () => {
     if (message.value.trim()) {
-        messageToSend.value.push(message.value)
-        message.value = ''
+        const newMessage = {
+            message: message.value,
+            time: new Date().toLocaleString()
+        }
+        messageToSend.value.push(newMessage)
+        message = ''
     }
 }
 
