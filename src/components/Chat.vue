@@ -23,7 +23,7 @@ defineProps({
                     </div>
                     <div class="grid grid-rows-[30px]">
                         <div class="grid grid-cols-[200px_auto]">
-                            <h3 class="text-gray-700 font-bold">Mr.Napat Chumtham </h3>
+                            <h3 class="text-gray-700 font-bold">Mr.Napat Chumtham. </h3>
                             <span class="text-gray-500 flex items-center">{{ message.time }}</span>
                         </div>
                         <p class="text-gray-700 break-words whitespace-normal">{{ message.message }}</p>
