@@ -35,7 +35,7 @@ const handleSearch = () => {
                 <div class="grid grid-cols-3 h-[100px]">
                     <div class="grid grid-rows-[70%_auto] mx-10">
                         <h1 class="font-bold text-gray-500 flex self-end">Sales Team</h1>
-                        <p class="flex self-start text-gray-500">20 👤 | description for your team...</p>
+                        <p class="flex self-start text-gray-500">20 👤 | description for your team....</p>
                     </div>
                     <div class="">
                         <Member />
