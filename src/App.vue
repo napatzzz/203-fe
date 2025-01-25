@@ -80,7 +80,9 @@ const createBranch = () => {
                 :key="branch.id"
                 class="p-3 mb-2 bg-blue-700 rounded text-center cursor-pointer hover:bg-blue-600 transition mr-20"
               >
-                {{ branch.bname }}
+                <div>
+                  <h3>{{ branch.bname }}</h3>
+                </div>
               </li>
             </ul></a
           >
