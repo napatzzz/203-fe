@@ -58,7 +58,6 @@ const createBranch = () => {
   input.value = false;
 };
 
-
 const showForm = ref(false);
 const Channels = ref([]);
 const NameInput = ref("");
@@ -78,6 +77,20 @@ function addChannel() {
 function CloseAndSubmit() {
   showForm.value = !showForm.value;
 }
+
+const notify = ref([]);
+const addNotification = () => {
+  const message = [
+    "Notification Hi",
+    "Notification Hello",
+    "Notification Good",
+    "Notification Bad",
+    "Notification Sad",
+    "Notification GoodBye",
+    "Notification GoodNight",
+  ];
+  notify.value.push(...message);
+};
 </script>
 
 <template>
@@ -95,56 +108,55 @@ function CloseAndSubmit() {
 
         <div class="flex-1 bg-blue-700 p-6">
           <h1 class="text-2xl font-bold mb-6">Your Workspace</h1>
-         
-            <ul class="w-full">
-              <li
-                v-for="branch in branchs"
-                :key="branch.id"
-                class="p-3 mb-2 bg-blue-700 rounded text-center cursor-pointer hover:bg-blue-600 transition mr-20"
-              >
-                <div>
-                  <h3>{{ branch.bname }}</h3>
-                  <div class="bg-blue-500 w-34 h-6 m-10 rounded-md">
-                    <button @click="CreateChannel" class=" text-white">
-                      Create Channel.
-                    </button>
-                  </div>
-                  <div
-                    @click="CreateForm"
-                    v-show="showForm"
-                    class="rounded-md w-xs h-84 bg-blue-500 m-10 absolute"
-                  >
-                    <form @click.prevent="addChannel">
-                      <input
-                        type="text"
-                        v-model="NameInput"
-                        class="bg-neutral-300 m-5 rounded-md"
-                      />
-                      <button
-                        class="bg-blue-200 w-14 rounded-md"
-                        @click="CloseAndSubmit"
-                        type="submit"
-                      >
-                        Create
-                      </button>
-                    </form>
-                  </div>
-                  <div>
-                    <h1
-                      class="text-3xl w-32 rounded-md bg-blue-200 text-neutral-950 ml-8 font-semibold text-center"
-                    >
-                    </h1>
-                    <h1
-                      v-for="(channel, index) in Channels"
-                      :key="index"
-                      class="w-xs  rounded-md text-xl text-center"
-                    >
-                      {{ channel }}
-                    </h1>
-                  </div>
+
+          <ul class="w-full">
+            <li
+              v-for="branch in branchs"
+              :key="branch.id"
+              class="p-3 mb-2 bg-blue-700 rounded text-center cursor-pointer hover:bg-blue-600 transition mr-20"
+            >
+              <div>
+                <h3>{{ branch.bname }}</h3>
+                <div class="bg-blue-500 w-34 h-6 m-10 rounded-md">
+                  <button @click="CreateChannel" class="text-white">
+                    Create Channel.
+                  </button>
                 </div>
-              </li>
-            </ul>
+                <div
+                  @click="CreateForm"
+                  v-show="showForm"
+                  class="rounded-md w-xs h-84 bg-blue-500 m-10 absolute"
+                >
+                  <form @click.prevent="addChannel">
+                    <input
+                      type="text"
+                      v-model="NameInput"
+                      class="bg-neutral-300 m-5 rounded-md"
+                    />
+                    <button
+                      class="bg-blue-200 w-14 rounded-md"
+                      @click="CloseAndSubmit"
+                      type="submit"
+                    >
+                      Create
+                    </button>
+                  </form>
+                </div>
+                <div>
+                  <h1
+                    class="text-3xl w-32 rounded-md bg-blue-200 text-neutral-950 ml-8 font-semibold text-center"
+                  ></h1>
+                  <h1
+                    v-for="(channel, index) in Channels"
+                    :key="index"
+                    class="w-xs rounded-md text-xl text-center"
+                  >
+                    {{ channel }}
+                  </h1>
+                </div>
+              </div>
+            </li>
+          </ul>
           <div
             v-if="input"
             class="bg-blue-800 p-6 rounded-lg shadow-lg max-w-md mx-auto"
@@ -207,7 +219,18 @@ function CloseAndSubmit() {
               <div class="">
                 <Member />
               </div>
-              <div class="">name</div>
+              <div
+                class="w-12 h-12 rounded-full bg-blue-700 flex items-center justify-center text-2xl"
+                @click="addNotification"
+              >
+                ✉️
+              </div>
+              <div
+                v-for="notification in notify"
+                class="bg-blue-400 text-slate-100 border-solid border-4 rounded-lg px-4 py-2 w-80 shadow-md"
+              >
+                {{ notification }}
+              </div>
             </div>
           </div>
           <div class="">
