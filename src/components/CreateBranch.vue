@@ -11,10 +11,10 @@ const closeInputContainer = () => {
 };
 
 let id = 0;
-const branchs = ref([{ id: id++, bname: "Example Branch", binfo: "This is an example." }]);
+const branchs = ref([]);
 const inputBranch = ref("");
 const inputInfo = ref("");
-
+//ใช้.trimเพื่อป้องกันการกดspacebarมาแล้วกดcreate
 const createBranch = () => {
   if (!inputBranch.value.trim()) {
     alert("Branch Name Can't be Null");
@@ -36,24 +36,25 @@ const createBranch = () => {
 <template>
 <div class="flex h-screen text-white bg-blue-900">
   <div class="w-1/6 bg-blue-800 flex flex-col items-center py-4 relative">
-    <h1 class="text-xl font-bold mb-6">Branches</h1>
-    <ul class="w-full">
-      <li 
-        v-for="branch in branchs" 
-        :key="branch.id" 
-        class="p-3 mb-2 bg-blue-700 rounded text-center cursor-pointer hover:bg-blue-600 transition">
-        {{ branch.bname }}
-      </li>
-    </ul>
+  
     <button 
       @click="showInputContainer" 
-      class="absolute bottom-4 bg-blue-500 hover:bg-blue-400 text-white rounded-full w-12 h-12 text-xl flex justify-center items-center shadow-lg">
+      class="absolute top-1000 bg-blue-500 hover:bg-blue-400 text-white rounded-full w-12 h-12 text-xl flex justify-center items-center shadow-lg">
       +
     </button>
   </div>
 
   <div class="flex-1 bg-blue-700 p-6">
     <h1 class="text-2xl font-bold mb-6">Welcome to Your Workspace</h1>
+    <a href="" class="text-white no-underline">
+    <ul class="w-full">
+      <li 
+        v-for="branch in branchs" 
+        :key="branch.id" 
+        class="p-3 mb-2 bg-blue-700 rounded text-center cursor-pointer hover:bg-blue-600 transition mr-20">
+        {{ branch.bname }}
+      </li>
+    </ul></a>
     <div v-if="input" class="bg-blue-800 p-6 rounded-lg shadow-lg max-w-md mx-auto">
       <input 
         type="text" 
@@ -79,8 +80,8 @@ const createBranch = () => {
       </div>
     </div>
   </div>
-
-  <div class="w-1/4 bg-blue-800 p-4">
+ <!-- เก็บไว้ก่อนค่อยใช้ -->
+  <!-- <div class="w-1/4 bg-blue-800 p-4">
     <h1 class="text-center text-xl font-bold mb-4">Announcements</h1>
     <ul class="space-y-4">
       <li 
@@ -90,7 +91,7 @@ const createBranch = () => {
         Announcement for {{ branch.bname }}
       </li>
     </ul>
-  </div>
+  </div> -->
 </div>
 </template>
 
