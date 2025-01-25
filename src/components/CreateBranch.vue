@@ -45,7 +45,7 @@ const createBranch = () => {
   </div>
 
   <div class="flex-1 bg-blue-700 p-6">
-    <h1 class="text-2xl font-bold mb-6">Welcome to Your Workspace</h1>
+    <h1 class="text-2xl font-bold mb-6">Your Workspace</h1>
     <a href="" class="text-white no-underline">
     <ul class="w-full">
       <li 
