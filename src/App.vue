@@ -55,6 +55,7 @@ const createBranch = () => {
   branchs.value.push(newBranch);
   inputBranch.value = "";
   inputInfo.value = "";
+  input.value = false;
 };
 
 
