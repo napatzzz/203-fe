@@ -105,7 +105,7 @@ function CloseAndSubmit() {
                   <h3>{{ branch.bname }}</h3>
                   <div class="bg-blue-500 w-34 h-6 m-10 rounded-md">
                     <button @click="CreateChannel" class=" text-white">
-                      Create Channel
+                      Create Channel.
                     </button>
                   </div>
                   <div
