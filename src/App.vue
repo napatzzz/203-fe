@@ -56,6 +56,27 @@ const createBranch = () => {
   inputBranch.value = "";
   inputInfo.value = "";
 };
+
+
+const showForm = ref(false);
+const Channels = ref([]);
+const NameInput = ref("");
+
+function CreateChannel() {
+  showForm.value = !showForm.value;
+}
+
+function addChannel() {
+  const input = NameInput.value.trim();
+  if (input) {
+    Channels.value.push(input);
+    NameInput.value = "";
+  }
+}
+
+function CloseAndSubmit() {
+  showForm.value = !showForm.value;
+}
 </script>
 
 <template>
@@ -73,7 +94,7 @@ const createBranch = () => {
 
         <div class="flex-1 bg-blue-700 p-6">
           <h1 class="text-2xl font-bold mb-6">Your Workspace</h1>
-          <a href="" class="text-white no-underline">
+         
             <ul class="w-full">
               <li
                 v-for="branch in branchs"
@@ -82,10 +103,47 @@ const createBranch = () => {
               >
                 <div>
                   <h3>{{ branch.bname }}</h3>
+                  <div class="bg-blue-500 w-34 h-6 m-10 rounded-md">
+                    <button @click="CreateChannel" class=" text-white">
+                      Create Channel
+                    </button>
+                  </div>
+                  <div
+                    @click="CreateForm"
+                    v-show="showForm"
+                    class="rounded-md w-xs h-84 bg-blue-500 m-10 absolute"
+                  >
+                    <form @click.prevent="addChannel">
+                      <input
+                        type="text"
+                        v-model="NameInput"
+                        class="bg-neutral-300 m-5 rounded-md"
+                      />
+                      <button
+                        class="bg-blue-200 w-14 rounded-md"
+                        @click="CloseAndSubmit"
+                        type="submit"
+                      >
+                        Create
+                      </button>
+                    </form>
+                  </div>
+                  <div>
+                    <h1
+                      class="text-3xl w-32 rounded-md bg-blue-200 text-neutral-950 ml-8 font-semibold text-center"
+                    >
+                    </h1>
+                    <h1
+                      v-for="(channel, index) in Channels"
+                      :key="index"
+                      class="w-xs  rounded-md text-xl text-center"
+                    >
+                      {{ channel }}
+                    </h1>
+                  </div>
                 </div>
               </li>
-            </ul></a
-          >
+            </ul>
           <div
             v-if="input"
             class="bg-blue-800 p-6 rounded-lg shadow-lg max-w-md mx-auto"
