@@ -4,7 +4,6 @@ const messageToSend = ref([]);
 const message = ref("");
 const searchParam = ref("");
 
-
 const sendMessage = () => {
   if (message.value.trim()) {
     const newMessage = {
@@ -12,38 +11,35 @@ const sendMessage = () => {
       time: new Date().toLocaleString(),
     };
     messageToSend.value.push(newMessage);
-    message.value = "";
+    message = "";
   }
 };
 
 const searchHistory = (searchParam) => {
   return messageToSend.value.filter((m) =>
-    m.message.toLowerCase().includes(searchParam.toLowerCase())
+    m.toLowerCase().includes(searchParam.toLowerCase())
   );
 };
 
 const handleSearch = () => {
   messageToSend.value = searchHistory(searchParam.value);
-  console.log(messageToSend.value);
+  sendMessage();
 };
 
-const clearSearch = () => {
-  searchParam = ''
-}
-
-const input = ref(false);
 
 const showInputContainer = () => {
-  input.value = true;
+  input.value = !null;
 };
 const closeInputContainer = () => {
-  input.value = false;
+  input.value = null;
 };
 
 let id = 0;
 const branchs = ref([]);
 const inputBranch = ref("");
 const inputInfo = ref("");
+const input = ref(null);
+
 //ใช้.trimเพื่อป้องกันการกดspacebarมาแล้วกดcreate
 const createBranch = () => {
   if (!inputBranch.value.trim()) {
@@ -55,47 +51,42 @@ const createBranch = () => {
     id: id++,
     bname: inputBranch.value,
     binfo: inputInfo.value,
+    channels:[],
   };
 
   branchs.value.push(newBranch);
   inputBranch.value = "";
   inputInfo.value = "";
-  input.value = false;
+  input.value = null;
 };
 
-const showForm = ref(false);
-const Channels = ref([]);
+
+const showForm = ref(null);
 const NameInput = ref("");
 
-function CreateChannel() {
-  showForm.value = !showForm.value;
-}
 
-function addChannel() {
-  const input = NameInput.value.trim();
-  if (input) {
-    Channels.value.push(input);
-    NameInput.value = "";
+function CreateChannel(branchId) {
+  if (showForm.value === branchId){
+    showForm.value = null
+  }
+  else{
+    showForm.value = branchId
+
   }
 }
 
-function CloseAndSubmit() {
-  showForm.value = !showForm.value;
-}
+const addChannelToBranch = (branchId) => {
+    const findId = branchs.value.find((b) => b.id === branchId)
+    const input = NameInput.value.trim()
+    if (findId && input){
+      findId.channels.push(input)
+      NameInput.value = ""
+      showForm.value = null
+    }
+  }
+ 
 
-const notify = ref([]);
-const addNotification = () => {
-  const noti = [
-    "Notification Hi",
-    "Notification Hello",
-    "Notification Good",
-    "Notification Bad",
-    "Notification Sad",
-    "Notification GoodBye",
-    "Notification GoodNight",
-  ];
-  notify.value.push(...noti);
-};
+
 </script>
 
 <template>
@@ -113,57 +104,52 @@ const addNotification = () => {
 
         <div class="flex-1 bg-blue-700 p-6">
           <h1 class="text-2xl font-bold mb-6">Your Workspace</h1>
-
-          <ul class="w-full">
-            <li
-              v-for="branch in branchs"
-              :key="branch.id"
-              class="p-3 mb-2 bg-blue-700 rounded text-center cursor-pointer hover:bg-blue-600 transition mr-20"
-            >
-              <div>
-                <h3>{{ branch.bname }}</h3>
-                <div class="bg-blue-500 w-34 h-6 m-10 rounded-md">
-                  <button @click="CreateChannel" class="text-white">
-                    Create Channel.
-                  </button>
-                </div>
-                <div
-                  @click="CreateForm"
-                  v-show="showForm"
-                  class="rounded-md w-xs h-84 bg-blue-500 m-10 absolute"
-                >
-                  <form @click.prevent="addChannel">
-                    <input
-                      type="text"
-                      v-model="NameInput"
-                      class="bg-neutral-300 m-5 rounded-md"
-                    />
-                    <button
-                      class="bg-blue-200 w-14 rounded-md"
-                      @click="CloseAndSubmit"
-                      type="submit"
-                    >
-                      Create
-                    </button>
-                  </form>
-                </div>
+         
+            <div class="w-full">
+              <div
+                v-for="branch in branchs"
+                :key="branch.id"
+                class="p-3 mb-2 bg-blue-700 rounded-md text-center cursor-pointer hover:bg-blue-600 transition mr-20"
+              >
                 <div>
-                  <h1
-                    class="text-3xl w-32 rounded-md bg-blue-200 text-neutral-950 ml-8 font-semibold text-center"
-                  ></h1>
-                  <h1
-                    v-for="(channel, index) in Channels"
-                    :key="index"
-                    class="w-xs rounded-md text-xl text-center"
+                  <h3 class="absolute rounded-md font-bold">{{ branch.bname }}</h3>
+                  <button @click="CreateChannel(branch.id)" class="rounded-md ml-24 ">
+                      Create Channel
+                    </button>
+                  <div
+                    v-if="showForm === branch.id"
+                    class="rounded-md w-xs h-84 bg-blue-500 m-10"
+
                   >
-                    {{ channel }}
-                  </h1>
+                    <form class="absolute mb-32 ml-40 bg-blue-600 rounded-md" @submit.prevent="addChannelToBranch(branch.id)">
+                      <input
+                        type="text"
+                        v-model="NameInput"
+                        class="bg-blue-400 m-5 rounded-md"
+                      />
+                      <button
+                        class="bg-blue-600 w-14 rounded-md"
+                        type="submit"
+                      >
+                        Create
+                      </button>
+                    </form>
+                  </div>
+                  <div>
+              
+                    <h1
+                      v-for="(channel, index) in branch.channels"
+                      :key="index"
+                      class="w-xs rounded-md text-xl text-left font-normal"
+                    >
+                      {{ channel }}
+                    </h1>
+                  </div>
                 </div>
               </div>
-            </li>
-          </ul>
-          <div
-            v-if="input"
+            </div>
+          <div 
+            v-if="input !== null"
             class="bg-blue-800 p-6 rounded-lg shadow-lg max-w-md mx-auto"
           >
             <input
@@ -222,46 +208,9 @@ const addNotification = () => {
                 </p>
               </div>
               <div class="">
-                <div class="">
-                  <div
-                    class="flex justify-center items-center h-[100px] flex-wrap space-x-1"
-                  >
-                    <div class="avatar">
-                      <div class="mask mask-squircle w-8">
-                        <img
-                          src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                        />
-                      </div>
-                    </div>
-                    <div class="avatar">
-                      <div class="mask mask-squircle w-8">
-                        <img
-                          src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                        />
-                      </div>
-                    </div>
-                    <div class="avatar">
-                      <div class="mask mask-squircle w-8">
-                        <img
-                          src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <Member />
               </div>
-              <div
-                class="w-12 h-12 rounded-full bg-blue-700 flex items-center justify-center text-2xl"
-                @click="addNotification"
-              >
-                ✉️
-              </div>
-              <div
-                v-for="notification in notify"
-                class="bg-blue-400 text-slate-100 border-solid border-4 rounded-lg px-4 py-2 w-80 shadow-md"
-              >
-                {{ notification }}
-              </div>
+              <div class="">name</div>
             </div>
           </div>
           <div class="">
@@ -335,7 +284,7 @@ const addNotification = () => {
             <div class="px-10 my-5">
               <input
                 class="w-full placeholder:text-slate-600 text-slate-700 text-sm border border-none rounded-md pl-3 pr-28 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
-                placeholder="Send messages"
+                placeholder="Search history message"
                 v-model="message"
                 @keyup.enter="sendMessage"
               />
