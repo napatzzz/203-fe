@@ -4,6 +4,7 @@ const messageToSend = ref([]);
 const message = ref("");
 const searchParam = ref("");
 
+
 const sendMessage = () => {
   if (message.value.trim()) {
     const newMessage = {
@@ -11,20 +12,24 @@ const sendMessage = () => {
       time: new Date().toLocaleString(),
     };
     messageToSend.value.push(newMessage);
-    message = "";
+    message.value = "";
   }
 };
 
 const searchHistory = (searchParam) => {
   return messageToSend.value.filter((m) =>
-    m.toLowerCase().includes(searchParam.toLowerCase())
+    m.message.toLowerCase().includes(searchParam.toLowerCase())
   );
 };
 
 const handleSearch = () => {
   messageToSend.value = searchHistory(searchParam.value);
-  sendMessage();
+  console.log(messageToSend.value);
 };
+
+const clearSearch = () => {
+  searchParam = ''
+}
 
 const input = ref(false);
 
@@ -80,7 +85,7 @@ function CloseAndSubmit() {
 
 const notify = ref([]);
 const addNotification = () => {
-  const message = [
+  const noti = [
     "Notification Hi",
     "Notification Hello",
     "Notification Good",
@@ -89,7 +94,7 @@ const addNotification = () => {
     "Notification GoodBye",
     "Notification GoodNight",
   ];
-  notify.value.push(...message);
+  notify.value.push(...noti);
 };
 </script>
 
@@ -217,7 +222,33 @@ const addNotification = () => {
                 </p>
               </div>
               <div class="">
-                <Member />
+                <div class="">
+                  <div
+                    class="flex justify-center items-center h-[100px] flex-wrap space-x-1"
+                  >
+                    <div class="avatar">
+                      <div class="mask mask-squircle w-8">
+                        <img
+                          src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                        />
+                      </div>
+                    </div>
+                    <div class="avatar">
+                      <div class="mask mask-squircle w-8">
+                        <img
+                          src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                        />
+                      </div>
+                    </div>
+                    <div class="avatar">
+                      <div class="mask mask-squircle w-8">
+                        <img
+                          src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div
                 class="w-12 h-12 rounded-full bg-blue-700 flex items-center justify-center text-2xl"
@@ -304,7 +335,7 @@ const addNotification = () => {
             <div class="px-10 my-5">
               <input
                 class="w-full placeholder:text-slate-600 text-slate-700 text-sm border border-none rounded-md pl-3 pr-28 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
-                placeholder="Search history message"
+                placeholder="Send messages"
                 v-model="message"
                 @keyup.enter="sendMessage"
               />
