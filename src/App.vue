@@ -105,7 +105,7 @@ const toggleNotifications = () => {
         <div class="w-1/6 bg-blue-800 flex flex-col items-center py-4 relative">
           <button
             @click="showInputContainer"
-            class="absolute top-1000 bg-blue-500 hover:bg-blue-400 text-white rounded-full w-12 h-12 text-xl flex justify-center items-center shadow-lg"
+            class="absolute bg-blue-500 hover:bg-blue-400 text-white rounded-full w-12 h-12 text-xl flex justify-center items-center shadow-lg"
           >
             +
           </button>
