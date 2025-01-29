@@ -79,6 +79,23 @@ const addChannelToBranch = (branchId) => {
     showForm.value = null;
   }
 };
+
+const notify = ref([]);
+const visible = ref(false);
+const addNotification = () => {
+  const message = ["Eve", "Fiona", "God", "Louis", "Ball", "Sharon", "Richard"];
+  notify.value.push(...message);
+};
+
+const toggleNotifications = () => {
+  if (!visible.value) {
+    if (notify.value.length === 0) {
+      addNotification()
+    }
+  }
+
+  visible.value = !visible.value;
+};
 </script>
 
 <template>
@@ -231,7 +248,40 @@ const addChannelToBranch = (branchId) => {
                   </div>
                 </div>
               </div>
-              <div class="">name</div>
+              <div
+                class="absolute top-1 right-60 flex items-center rounded bg-blue-500 py-1 px-1.5 border border-transparent text-center text-sm text-white transition-all shadow-sm hover:shadow focus:shadow-none hover:bg-slate-700 active:shadow-none disabled:opacity-50"
+                @click="toggleNotifications"
+              >
+                Notification
+              </div>
+              <div
+                v-if="visible"
+                class="absolute right-4 top-14 w-64 bg-blue-500 z-10 shadow-lg rounded-lg border border-gray-200"
+              >
+                <div class="p-4 h-[400px] overflow-y-auto flex flex-col gap-3">
+                  <div
+                    v-for="message in notify"
+                    :key="message"
+                    class="flex items-center bg-gray-100 shadow-md rounded-md"
+                  >
+                    <div class="flex items-center p-2">
+                      <img
+                        class="object-cover w-10 h-10 rounded-lg"
+                        src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                        alt="avatar"
+                      />
+                      <div class="ml-3 overflow-hidden">
+                        <h3 class="font-semibold text-lg text-gray-800">
+                          {{ message }}
+                        </h3>
+                        <p class="text-sm text-gray-500">
+                          Lorem ipsum dolor sit love is my bro.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="">
