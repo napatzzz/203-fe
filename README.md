@@ -9,9 +9,9 @@
 Web Application chat for team managements
 
 # Function each member
-- Create Branch for team in branch [041]
-- Create team chat in branch and description [013]
-- Create annoutments message in team chat [036]
+- Create Branch for team in branch and Delete branch [041] 
+- Create team chat in branch and description and Delete team chat [013]
+- Create annoutments message in team chat and remove annoutments message [036]
 - Function Send Messages and Search messages from history and delete messages [027]
 
 # daily-work
