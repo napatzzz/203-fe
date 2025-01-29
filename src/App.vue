@@ -26,7 +26,6 @@ const handleSearch = () => {
   sendMessage();
 };
 
-
 const showInputContainer = () => {
   input.value = !null;
 };
@@ -51,7 +50,7 @@ const createBranch = () => {
     id: id++,
     bname: inputBranch.value,
     binfo: inputInfo.value,
-    channels:[],
+    channels: [],
   };
 
   branchs.value.push(newBranch);
@@ -60,33 +59,26 @@ const createBranch = () => {
   input.value = null;
 };
 
-
 const showForm = ref(null);
 const NameInput = ref("");
 
-
 function CreateChannel(branchId) {
-  if (showForm.value === branchId){
-    showForm.value = null
-  }
-  else{
-    showForm.value = branchId
-
+  if (showForm.value === branchId) {
+    showForm.value = null;
+  } else {
+    showForm.value = branchId;
   }
 }
 
 const addChannelToBranch = (branchId) => {
-    const findId = branchs.value.find((b) => b.id === branchId)
-    const input = NameInput.value.trim()
-    if (findId && input){
-      findId.channels.push(input)
-      NameInput.value = ""
-      showForm.value = null
-    }
+  const findId = branchs.value.find((b) => b.id === branchId);
+  const input = NameInput.value.trim();
+  if (findId && input) {
+    findId.channels.push(input);
+    NameInput.value = "";
+    showForm.value = null;
   }
- 
-
-
+};
 </script>
 
 <template>
@@ -104,51 +96,54 @@ const addChannelToBranch = (branchId) => {
 
         <div class="flex-1 bg-blue-700 p-6">
           <h1 class="text-2xl font-bold mb-6">Your Workspace</h1>
-         
-            <div class="w-full">
-              <div
-                v-for="branch in branchs"
-                :key="branch.id"
-                class="p-3 mb-2 bg-blue-700 rounded-md text-center cursor-pointer hover:bg-blue-600 transition mr-20"
-              >
-                <div>
-                  <h3 class="absolute rounded-md font-bold">{{ branch.bname }}</h3>
-                  <button @click="CreateChannel(branch.id)" class="rounded-md ml-24 ">
-                      Create Channel
-                    </button>
-                  <div
-                    v-if="showForm === branch.id"
-                    class="rounded-md w-xs h-84 bg-blue-500 m-10"
 
+          <div class="w-full">
+            <div
+              v-for="branch in branchs"
+              :key="branch.id"
+              class="p-3 mb-2 bg-blue-700 rounded-md text-center cursor-pointer hover:bg-blue-600 transition mr-20"
+            >
+              <div>
+                <h3 class="absolute rounded-md font-bold">
+                  {{ branch.bname }}
+                </h3>
+                <button
+                  @click="CreateChannel(branch.id)"
+                  class="rounded-md ml-24"
+                >
+                  Create Channel
+                </button>
+                <div
+                  v-if="showForm === branch.id"
+                  class="rounded-md w-xs h-84 bg-blue-500 m-10"
+                >
+                  <form
+                    class="absolute mb-32 ml-40 bg-blue-600 rounded-md"
+                    @submit.prevent="addChannelToBranch(branch.id)"
                   >
-                    <form class="absolute mb-32 ml-40 bg-blue-600 rounded-md" @submit.prevent="addChannelToBranch(branch.id)">
-                      <input
-                        type="text"
-                        v-model="NameInput"
-                        class="bg-blue-400 m-5 rounded-md"
-                      />
-                      <button
-                        class="bg-blue-600 w-14 rounded-md"
-                        type="submit"
-                      >
-                        Create
-                      </button>
-                    </form>
-                  </div>
-                  <div>
-              
-                    <h1
-                      v-for="(channel, index) in branch.channels"
-                      :key="index"
-                      class="w-xs rounded-md text-xl text-left font-normal"
-                    >
-                      {{ channel }}
-                    </h1>
-                  </div>
+                    <input
+                      type="text"
+                      v-model="NameInput"
+                      class="bg-blue-400 m-5 rounded-md"
+                    />
+                    <button class="bg-blue-600 w-14 rounded-md" type="submit">
+                      Create
+                    </button>
+                  </form>
+                </div>
+                <div>
+                  <h1
+                    v-for="(channel, index) in branch.channels"
+                    :key="index"
+                    class="w-xs rounded-md text-xl text-left font-normal"
+                  >
+                    {{ channel }}
+                  </h1>
                 </div>
               </div>
             </div>
-          <div 
+          </div>
+          <div
             v-if="input !== null"
             class="bg-blue-800 p-6 rounded-lg shadow-lg max-w-md mx-auto"
           >
@@ -208,7 +203,33 @@ const addChannelToBranch = (branchId) => {
                 </p>
               </div>
               <div class="">
-                <Member />
+                <div class="">
+                  <div
+                    class="flex justify-center items-center h-[100px] flex-wrap space-x-1"
+                  >
+                    <div class="avatar">
+                      <div class="mask mask-squircle w-8">
+                        <img
+                          src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                        />
+                      </div>
+                    </div>
+                    <div class="avatar">
+                      <div class="mask mask-squircle w-8">
+                        <img
+                          src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                        />
+                      </div>
+                    </div>
+                    <div class="avatar">
+                      <div class="mask mask-squircle w-8">
+                        <img
+                          src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div class="">name</div>
             </div>
