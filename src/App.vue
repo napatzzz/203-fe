@@ -11,13 +11,13 @@ const sendMessage = () => {
       time: new Date().toLocaleString(),
     };
     messageToSend.value.push(newMessage);
-    message = "";
+    message.value = "";
   }
 };
 
 const searchHistory = (searchParam) => {
   return messageToSend.value.filter((m) =>
-    m.toLowerCase().includes(searchParam.toLowerCase())
+    m.message.toLowerCase().includes(searchParam.toLowerCase())
   );
 };
 
