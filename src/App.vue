@@ -119,7 +119,7 @@ const removeBranch = (branchId) => {
 </script>
 
 <template>
-  <div class="grid grid-cols-[25%_auto] w-screen h-screen font-montserrat ">
+  <div class="grid grid-cols-[29.5%_auto] w-screen h-screen font-montserrat ">
     <div class="bg-blue-600">
       <div class="flex h-screen text-white bg-blue-900">
         <div class="w-1/6 bg-blue-800 flex flex-col items-center py-4 relative">
@@ -146,7 +146,7 @@ const removeBranch = (branchId) => {
                     class="flex items-center px-3 py-1 bg-blue-600 rounded-lg"
                   >
                     <!-- ส่วนชื่อ Branch -->
-                    <h3 class="text-white font-bold flex-1 truncate max-w-50">
+                    <h3 class="text-white font-bold flex-1 truncate max-w-40">
                       {{ branch.bname }}
                     </h3>
                     <!-- ส่วนไอคอน ✅ ❌ -->
