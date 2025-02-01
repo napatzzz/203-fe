@@ -35,6 +35,18 @@ const closeInputContainer = () => {
 
 let id = 0;
 const branchs = ref([]);
+
+branchs.value[0] = {
+  id: 999,
+  bname: "Welcome DailyWorks",
+  binfo: "",
+  channels: [
+    {
+      name: "Welcome",
+    },
+  ],
+};
+
 const inputBranch = ref("");
 const inputInfo = ref("");
 const input = ref(null);
@@ -52,6 +64,8 @@ const createBranch = () => {
     binfo: inputInfo.value,
     channels: [],
   };
+
+  console.log(newBranch);
 
   branchs.value.push(newBranch);
   inputBranch.value = "";
@@ -74,7 +88,10 @@ const addChannelToBranch = (branchId) => {
   const findId = branchs.value.find((b) => b.id === branchId);
   const input = NameInput.value.trim();
   if (findId && input) {
-    findId.channels.push(input);
+    console.log(input);
+    findId.channels.push({
+      name: input,
+    });
     NameInput.value = "";
     showForm.value = null;
   }
@@ -90,7 +107,7 @@ const addNotification = () => {
 const toggleNotifications = () => {
   if (!visible.value) {
     if (notify.value.length === 0) {
-      addNotification()
+      addNotification();
     }
   }
 
@@ -111,28 +128,30 @@ const toggleNotifications = () => {
           </button>
         </div>
 
-        <div class="flex-1 bg-blue-700 p-6">
-          <h1 class="text-2xl font-bold mb-6">Your Workspace</h1>
+        <div class="flex-1 bg-blue-700 p-6 w-full">
+          <h1 class="text-2xl font-bold mb-6 tracking-wide">DailyWorks</h1>
 
           <div class="w-full">
             <div
               v-for="branch in branchs"
               :key="branch.id"
-              class="p-3 mb-2 bg-blue-700 rounded-md text-center cursor-pointer hover:bg-blue-600 transition mr-20"
+              class="p-1 mb-2 bg-blue-700 rounded-md text-center cursor-pointer hover:bg-blue-600 transition mr-20"
             >
               <div>
-                <h3 class="absolute rounded-md font-bold">
-                  {{ branch.bname }}
-                </h3>
-                <button
-                  @click="CreateChannel(branch.id)"
-                  class="rounded-md ml-24"
-                >
-                  Create Channel
-                </button>
+                <div class="flex flex-col">
+                  <h3 class="absolute rounded-md font-bold text-xl">
+                    {{ branch.bname }}
+                  </h3>
+                  <button
+                    @click="CreateChannel(branch.id)"
+                    class="rounded-md ml-24 self-end"
+                  >
+                    ✅
+                  </button>
+                </div>
                 <div
                   v-if="showForm === branch.id"
-                  class="rounded-md w-xs h-84 bg-blue-500 m-10"
+                  class="rounded-md h-84 bg-blue-500 m-10"
                 >
                   <form
                     class="absolute mb-32 ml-40 bg-blue-600 rounded-md"
@@ -148,13 +167,13 @@ const toggleNotifications = () => {
                     </button>
                   </form>
                 </div>
-                <div>
+                <div class="mt-1.5 ml-2">
                   <h1
                     v-for="(channel, index) in branch.channels"
                     :key="index"
-                    class="w-xs rounded-md text-xl text-left font-normal"
+                    class="w- rounded-md text-xl text-left font-normal"
                   >
-                    {{ channel }}
+                    <a class="" href="http://"> ✉️ {{ channel.name }}</a>
                   </h1>
                 </div>
               </div>
@@ -212,10 +231,12 @@ const toggleNotifications = () => {
           <div class="">
             <div class="grid grid-cols-3 h-[100px]">
               <div class="grid grid-rows-[70%_auto] mx-10">
-                <h1 class="font-bold text-gray-500 flex self-end">
-                  Sales Team
+                <h1
+                  class="font-bold text-2xl text-gray-500 flex self-center mt-3"
+                >
+                  {{ branchs[0].channels[0].name }}
                 </h1>
-                <p class="flex self-start text-gray-500">
+                <p class="flex self-start text-gray-500 -mt-2">
                   20 👤 | description for your team....
                 </p>
               </div>
@@ -227,6 +248,7 @@ const toggleNotifications = () => {
                     <div class="avatar">
                       <div class="mask mask-squircle w-8">
                         <img
+                          class="rounded-lg"
                           src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
                         />
                       </div>
@@ -234,6 +256,7 @@ const toggleNotifications = () => {
                     <div class="avatar">
                       <div class="mask mask-squircle w-8">
                         <img
+                          class="rounded-lg"
                           src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
                         />
                       </div>
@@ -241,6 +264,7 @@ const toggleNotifications = () => {
                     <div class="avatar">
                       <div class="mask mask-squircle w-8">
                         <img
+                          class="rounded-lg"
                           src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
                         />
                       </div>
