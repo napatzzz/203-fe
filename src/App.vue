@@ -113,10 +113,13 @@ const toggleNotifications = () => {
 
   visible.value = !visible.value;
 };
+const removeBranch = (branchId) => {
+  branchs.value = branchs.value.filter((branch) => branch.id !== branchId);
+};
 </script>
 
 <template>
-  <div class="grid grid-cols-[25%_auto] w-screen h-screen font-montserrat">
+  <div class="grid grid-cols-[25%_auto] w-screen h-screen font-montserrat ">
     <div class="bg-blue-600">
       <div class="flex h-screen text-white bg-blue-900">
         <div class="w-1/6 bg-blue-800 flex flex-col items-center py-4 relative">
@@ -138,17 +141,26 @@ const toggleNotifications = () => {
               class="p-1 mb-2 bg-blue-700 rounded-md text-center cursor-pointer hover:bg-blue-600 transition mr-20"
             >
               <div>
-                <div class="flex flex-col">
-                  <h3 class="absolute rounded-md font-bold text-xl">
-                    {{ branch.bname }}
-                  </h3>
-                  <button
-                    @click="CreateChannel(branch.id)"
-                    class="rounded-md ml-24 self-end"
+                <div class="p-2 space-y-2 overflow-y-auto">
+                  <div
+                    class="flex items-center px-3 py-1 bg-blue-600 rounded-lg"
                   >
-                    ✅
-                  </button>
+                    <!-- ส่วนชื่อ Branch -->
+                    <h3 class="text-white font-bold flex-1 truncate max-w-50">
+                      {{ branch.bname }}
+                    </h3>
+                    <!-- ส่วนไอคอน ✅ ❌ -->
+                    <div class="flex space-x-2 shrink-0">
+                      <button @click="CreateChannel(branch.id)" class="text-green-500 hover:text-green-700">
+                        ✅
+                      </button>
+                      <button @click="removeBranch(branch.id)" class="text-red-500 hover:text-red-700">
+                        ❌
+                      </button>
+                    </div>
+                  </div>
                 </div>
+
                 <div
                   v-if="showForm === branch.id"
                   class="rounded-md h-84 bg-blue-500 m-10"
@@ -173,7 +185,7 @@ const toggleNotifications = () => {
                     :key="index"
                     class="w- rounded-md text-xl text-left font-normal"
                   >
-                    <a class="" href="http://"> ✉️ {{ channel.name }}</a>
+                    <a  href="http://"><h4 class="text-white font-bold flex-1 truncate max-w-50">✉️ {{ channel.name }}</h4> </a>
                   </h1>
                 </div>
               </div>
