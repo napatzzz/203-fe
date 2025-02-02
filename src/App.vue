@@ -1,8 +1,9 @@
 <script setup>
-import { ref } from "vue";
-const messageToSend = ref([]);
-const message = ref("");
-const searchParam = ref("");
+import { ref, watch } from "vue"
+const messageToSend = ref([])
+const message = ref("")
+const searchParam = ref("")
+const messageTemp = ref([])
 
 const sendMessage = () => {
   if (message.value.trim()) {
@@ -10,20 +11,32 @@ const sendMessage = () => {
       message: message.value,
       time: new Date().toLocaleString(),
     };
-    messageToSend.value.push(newMessage);
-    message.value = "";
+    messageToSend.value.push(newMessage)
+    messageTemp.value.push(newMessage)
+    message.value = ""
   }
-};
+}; 
+
+const resendMessage = () => {
+  messageToSend.value = messageTemp.value
+}
+
+watch(searchParam, () => {
+  if (searchParam.value == '') {
+    resendMessage()
+    console.log(messageTemp.value)
+  }
+})
 
 const searchHistory = (searchParam) => {
   return messageToSend.value.filter((m) =>
-    m.message.toLowerCase().includes(searchParam.toLowerCase())
+    m.message.toLowerCase().includes(searchParam.value.toLowerCase())
   );
 };
 
 const handleSearch = () => {
-  messageToSend.value = searchHistory(searchParam.value);
-  sendMessage();
+  messageToSend.value = searchHistory(searchParam)
+  sendMessage()
 };
 
 const showInputContainer = () => {
