@@ -129,6 +129,14 @@ const toggleNotifications = () => {
 const removeBranch = (branchId) => {
   branchs.value = branchs.value.filter((branch) => branch.id !== branchId);
 };
+
+const removeChannel = (branchId,channelIndex) => {
+  const findBranch = branchs.value.find((branch) => branch.id === branchId)
+  if(findBranch && findBranch.channels[channelIndex]){
+    findBranch.channels.splice(channelIndex,1)
+  }
+}
+
 </script>
 
 <template>
@@ -194,11 +202,15 @@ const removeBranch = (branchId) => {
                 </div>
                 <div class="mt-1.5 ml-2">
                   <h1
-                    v-for="(channel, index) in branch.channels"
-                    :key="index"
+                    v-for="(channel, channelIndex) in branch.channels"
+                    :key="channelIndex"
                     class="w- rounded-md text-xl text-left font-normal"
                   >
+                  <div>
+                    <button class=" ml-28 " @click="removeChannel(branch.id,channelIndex)"> ❌</button>
                     <a  href="http://"><h4 class="text-white font-bold flex-1 truncate max-w-50">✉️ {{ channel.name }}</h4> </a>
+
+                  </div>
                   </h1>
                 </div>
               </div>
