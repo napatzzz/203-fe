@@ -1,9 +1,9 @@
 <script setup>
-import { ref, watch } from "vue"
-const messageToSend = ref([])
-const message = ref("")
-const searchParam = ref("")
-const messageTemp = ref([])
+import { ref, watch } from "vue";
+const messageToSend = ref([]);
+const message = ref("");
+const searchParam = ref("");
+const messageTemp = ref([]);
 
 const sendMessage = () => {
   if (message.value.trim()) {
@@ -11,22 +11,22 @@ const sendMessage = () => {
       message: message.value,
       time: new Date().toLocaleString(),
     };
-    messageToSend.value.push(newMessage)
-    messageTemp.value.push(newMessage)
-    message.value = ""
+    messageToSend.value.push(newMessage);
+    messageTemp.value.push(newMessage);
+    message.value = "";
   }
-}; 
+};
 
 const resendMessage = () => {
-  messageToSend.value = messageTemp.value
-}
+  messageToSend.value = messageTemp.value;
+};
 
 watch(searchParam, () => {
-  if (searchParam.value == '') {
-    resendMessage()
-    console.log(messageTemp.value)
+  if (searchParam.value == "") {
+    resendMessage();
+    console.log(messageTemp.value);
   }
-})
+});
 
 const searchHistory = (searchParam) => {
   return messageToSend.value.filter((m) =>
@@ -35,8 +35,8 @@ const searchHistory = (searchParam) => {
 };
 
 const handleSearch = () => {
-  messageToSend.value = searchHistory(searchParam)
-  sendMessage()
+  messageToSend.value = searchHistory(searchParam);
+  sendMessage();
 };
 
 const showInputContainer = () => {
@@ -126,21 +126,24 @@ const toggleNotifications = () => {
 
   visible.value = !visible.value;
 };
+const removeNotification = (index) => {
+  notify.value.splice(index, 1);
+};
+
 const removeBranch = (branchId) => {
   branchs.value = branchs.value.filter((branch) => branch.id !== branchId);
 };
 
-const removeChannel = (branchId,channelIndex) => {
-  const findBranch = branchs.value.find((branch) => branch.id === branchId)
-  if(findBranch && findBranch.channels[channelIndex]){
-    findBranch.channels.splice(channelIndex,1)
+const removeChannel = (branchId, channelIndex) => {
+  const findBranch = branchs.value.find((branch) => branch.id === branchId);
+  if (findBranch && findBranch.channels[channelIndex]) {
+    findBranch.channels.splice(channelIndex, 1);
   }
-}
-
+};
 </script>
 
 <template>
-  <div class="grid grid-cols-[29.5%_auto] w-screen h-screen font-montserrat ">
+  <div class="grid grid-cols-[29.5%_auto] w-screen h-screen font-montserrat">
     <div class="bg-blue-600">
       <div class="flex h-screen text-white bg-blue-900">
         <div class="w-1/6 bg-blue-800 flex flex-col items-center py-4 relative">
@@ -172,10 +175,16 @@ const removeChannel = (branchId,channelIndex) => {
                     </h3>
                     <!-- ส่วนไอคอน ✅ ❌ -->
                     <div class="flex space-x-2 shrink-0">
-                      <button @click="CreateChannel(branch.id)" class="text-green-500 hover:text-green-700">
+                      <button
+                        @click="CreateChannel(branch.id)"
+                        class="text-green-500 hover:text-green-700"
+                      >
                         ✅
                       </button>
-                      <button @click="removeBranch(branch.id)" class="text-red-500 hover:text-red-700">
+                      <button
+                        @click="removeBranch(branch.id)"
+                        class="text-red-500 hover:text-red-700"
+                      >
                         ❌
                       </button>
                     </div>
@@ -206,11 +215,21 @@ const removeChannel = (branchId,channelIndex) => {
                     :key="channelIndex"
                     class="w- rounded-md text-xl text-left font-normal"
                   >
-                  <div>
-                    <button class=" ml-28 " @click="removeChannel(branch.id,channelIndex)"> ❌</button>
-                    <a  href="http://"><h4 class="text-white font-bold flex-1 truncate max-w-50">✉️ {{ channel.name }}</h4> </a>
-
-                  </div>
+                    <div>
+                      <button
+                        class="ml-28"
+                        @click="removeChannel(branch.id, channelIndex)"
+                      >
+                        ❌
+                      </button>
+                      <a href="http://"
+                        ><h4
+                          class="text-white font-bold flex-1 truncate max-w-50"
+                        >
+                          ✉️ {{ channel.name }}
+                        </h4>
+                      </a>
+                    </div>
                   </h1>
                 </div>
               </div>
@@ -310,20 +329,20 @@ const removeChannel = (branchId,channelIndex) => {
                 </div>
               </div>
               <div
-                class="absolute top-1 right-60 flex items-center rounded bg-blue-500 py-1 px-1.5 border border-transparent text-center text-sm text-white transition-all shadow-sm hover:shadow focus:shadow-none hover:bg-slate-700 active:shadow-none disabled:opacity-50"
+                class="absolute top-9 right-25 flex items-center rounded bg-blue-500 py-1 px-1.5 border border-transparent text-center text-sm text-white transition-all shadow-sm hover:shadow focus:shadow-none hover:bg-slate-700 active:shadow-none disabled:opacity-50"
                 @click="toggleNotifications"
               >
                 Notification
               </div>
               <div
                 v-if="visible"
-                class="absolute right-4 top-14 w-64 bg-blue-500 z-10 shadow-lg rounded-lg border border-gray-200"
+                class="absolute right-4 top-20 w-64 bg-blue-500 z-10 shadow-lg rounded-lg border border-gray-200"
               >
                 <div class="p-4 h-[400px] overflow-y-auto flex flex-col gap-3">
                   <div
-                    v-for="message in notify"
-                    :key="message"
-                    class="flex items-center bg-gray-100 shadow-md rounded-md"
+                    v-for="(message, index_notify) in notify"
+                    :key="index_notify"
+                    class="relative flex items-center bg-gray-100 shadow-md rounded-md"
                   >
                     <div class="flex items-center p-2">
                       <img
@@ -340,6 +359,12 @@ const removeChannel = (branchId,channelIndex) => {
                         </p>
                       </div>
                     </div>
+                    <button
+                      @click="removeNotification(index_notify)"
+                      class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center"
+                    >
+                      ✕
+                    </button>
                   </div>
                 </div>
               </div>
