@@ -4,6 +4,23 @@ const messageToSend = ref([]);
 const message = ref("");
 const searchParam = ref("");
 const messageTemp = ref([]);
+const selectedMessage = ref("");
+
+const showDialogManage = (messageDialog) => {
+  if (selectedMessage.value === messageDialog) {
+    selectedMessage.value = ""
+  } else {
+    selectedMessage.value = messageDialog
+  }
+}
+
+const deleteMessage = (messageDialog) => {
+  messageToSend.value.splice(messageToSend.value.findIndex(message => message === messageDialog), 1)
+}
+
+const pinedMessage = (messageDialog) => {
+  notify.value.push(messageDialog)
+}
 
 const sendMessage = () => {
   if (message.value.trim()) {
@@ -27,7 +44,7 @@ watch(searchParam, () => {
     console.log(messageTemp.value);
   }
 });
-
+[1,3,4,5]
 const searchHistory = (searchParam) => {
   return messageToSend.value.filter((m) =>
     m.message.toLowerCase().includes(searchParam.value.toLowerCase())
@@ -112,10 +129,10 @@ const addChannelToBranch = (branchId) => {
 
 const notify = ref([]);
 const visible = ref(false);
-const addNotification = () => {
-  const message = ["Eve", "Fiona", "God", "Louis", "Ball", "Sharon", "Richard"];
-  notify.value.push(...message);
-};
+// const addNotification = () => {
+//   const message = ["Eve", "Fiona", "God", "Louis", "Ball", "Sharon", "Richard"];
+//   notify.value.push(...message);
+// };
 
 const toggleNotifications = () => {
   if (!visible.value) {
@@ -292,7 +309,7 @@ const removeChannel = (branchId, channelIndex) => {
                 >
                   {{ branchs[0].channels[0].name }}
                 </h1>
-                <p class="flex self-start text-gray-500 -mt-2">
+                <p class="flex self-start text-gray-500 -mt-2 text-sm">
                   20 👤 | description for your team....
                 </p>
               </div>
@@ -409,7 +426,8 @@ const removeChannel = (branchId, channelIndex) => {
                     :key="index"
                     class="p-1 text-white rounded-lg break-words text-start max-w-[90%] mx-10 my-2 overflow-wrap-break-word"
                   >
-                    <div class="grid grid-cols-[80px_auto] w-[100%] text-wrap">
+                    <div>
+                      <div class="grid grid-cols-[80px_auto] w-[100%] text-wrap">
                       <div class="avatar px-1">
                         <div class="w-[56px] h-[56px] rounded overflow-hidden">
                           <img
@@ -419,18 +437,27 @@ const removeChannel = (branchId, channelIndex) => {
                         </div>
                       </div>
                       <div class="grid grid-rows-[30px]">
-                        <div class="grid grid-cols-[200px_auto]">
-                          <h3 class="text-gray-700 font-bold">
+                        <div class="grid grid-cols-[220px_200px_30px_auto]">
+                          <h3 class="text-gray-700 font-bold text-lg">
                             Mr.Napat Chumtham.
                           </h3>
-                          <span class="text-gray-500 flex items-center">{{
+                          <span class="text-gray-500 flex text-base">{{
                             message.time
                           }}</span>
+                          <button v-on:click="showDialogManage(message)" class="flex justify-start items-start cursor-pointer">
+                            <img src="https://img.icons8.com/?size=100&id=42490&format=png&color=000000" alt="" width="20px">
+                          </button>
+                          <div v-show="selectedMessage == message" class="grid grid-rows-3">
+                            <button v-on:click="deleteMessage(message)" class="text-black">delete</button>
+                            <button class="text-black">edit</button>
+                            <button v-on:click="pinedMessage(message)"class="text-black">pin</button>
+                          </div>
                         </div>
                         <p class="text-gray-700 break-words whitespace-normal">
                           {{ message.message }}
                         </p>
                       </div>
+                    </div>
                     </div>
                   </div>
                 </div>
@@ -441,7 +468,7 @@ const removeChannel = (branchId, channelIndex) => {
             <div class="px-10 my-5">
               <input
                 class="w-full placeholder:text-slate-600 text-slate-700 text-sm border border-none rounded-md pl-3 pr-28 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
-                placeholder="Search history message"
+                placeholder="Send message here"
                 v-model="message"
                 @keyup.enter="sendMessage"
               />
@@ -451,6 +478,13 @@ const removeChannel = (branchId, channelIndex) => {
       </div>
     </div>
   </div>
+
+
 </template>
 
-<style scoped></style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+body {
+  font-family: "Montserrat", serif;
+}
+</style>
