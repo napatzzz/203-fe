@@ -8,19 +8,22 @@ const selectedMessage = ref("");
 
 const showDialogManage = (messageDialog) => {
   if (selectedMessage.value === messageDialog) {
-    selectedMessage.value = ""
+    selectedMessage.value = "";
   } else {
-    selectedMessage.value = messageDialog
+    selectedMessage.value = messageDialog;
   }
-}
+};
 
 const deleteMessage = (messageDialog) => {
-  messageToSend.value.splice(messageToSend.value.findIndex(message => message === messageDialog), 1)
-}
+  messageToSend.value.splice(
+    messageToSend.value.findIndex((message) => message === messageDialog),
+    1
+  );
+};
 
 const pinedMessage = (messageDialog) => {
-  notify.value.push(messageDialog)
-}
+  notify.value.push(messageDialog);
+};
 
 const sendMessage = () => {
   if (message.value.trim()) {
@@ -44,7 +47,7 @@ watch(searchParam, () => {
     console.log(messageTemp.value);
   }
 });
-[1,3,4,5]
+[1, 3, 4, 5];
 const searchHistory = (searchParam) => {
   return messageToSend.value.filter((m) =>
     m.message.toLowerCase().includes(searchParam.value.toLowerCase())
@@ -129,6 +132,8 @@ const addChannelToBranch = (branchId) => {
 
 const notify = ref([]);
 const visible = ref(false);
+const formEdit = ref(false)
+const newChannelName = ref("")
 // const addNotification = () => {
 //   const message = ["Eve", "Fiona", "God", "Louis", "Ball", "Sharon", "Richard"];
 //   notify.value.push(...message);
@@ -157,10 +162,23 @@ const removeChannel = (branchId, channelIndex) => {
     findBranch.channels.splice(channelIndex, 1);
   }
 };
-const hiddenButton = ref(false)
-const showButton = () => {
-  hiddenButton.value =! hiddenButton.value
+const EditChannel = () => {
+  formEdit.value = !formEdit.value
 }
+const saveEditChannel = (branchId,channelIndex) =>{
+  const findOfBranch = branchs.value.find((branch) => branch.id === branchId);
+  if(findOfBranch && findOfBranch.channels[channelIndex]){
+    findOfBranch.channels[channelIndex].name = newChannelName.value
+    newChannelName.value = ""
+    formEdit.value = !formEdit.value
+
+  }
+}
+
+const hiddenButton = ref(false);
+const showButton = () => {
+  hiddenButton.value = !hiddenButton.value;
+};
 </script>
 
 <template>
@@ -183,12 +201,12 @@ const showButton = () => {
             <div
               v-for="branch in branchs"
               :key="branch.id"
-              class="p-1 mb-2 bg-blue-700 rounded-md text-center cursor-pointer hover:bg-blue-600 transition mr-20"
+              class="p-3 mb-2 bg-blue-700 rounded-md text-center cursor-pointer hover:bg-blue-600 transition relative"
             >
               <div>
                 <div class="p-2 space-y-2 overflow-y-auto">
                   <div
-                    class="flex items-center px-3 py-1 bg-blue-600 rounded-lg"
+                    class="flex items-center px-3 py-2 bg-blue-600 rounded-lg"
                   >
                     <!-- ส่วนชื่อ Branch -->
                     <h3 class="text-white font-bold flex-1 truncate max-w-40">
@@ -196,23 +214,23 @@ const showButton = () => {
                     </h3>
                     <!-- ส่วนไอคอน ✅ ❌ -->
                     <div class="flex space-x-2 shrink-0">
-                      <div> 
+                      <div>
                         <button @click="showButton">
-                          <img src="" alt="">x
+                          <img src="" alt="" />x
                         </button>
                         <div v-if="hiddenButton">
                           <button
-                        @click="CreateChannel(branch.id)"
-                        class="text-green-500 hover:text-green-700"
-                      >
-                        ✅
-                      </button>
-                      <button
-                        @click="removeBranch(branch.id)"
-                        class="text-red-500 hover:text-red-700"
-                      >
-                        ❌
-                      </button>
+                            @click="CreateChannel(branch.id)"
+                            class="text-green-500 hover:text-green-700"
+                          >
+                            ✅
+                          </button>
+                          <button
+                            @click="removeBranch(branch.id)"
+                            class="text-red-500 hover:text-red-700"
+                          >
+                            ❌
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -221,42 +239,90 @@ const showButton = () => {
 
                 <div
                   v-if="showForm === branch.id"
-                  class="rounded-md h-84 bg-blue-500 m-10"
+                  :class="[
+                    'mt-2 bg-blue-500 rounded-md p-4 transition-all',
+                    showForm === branch.id
+                      ? 'h-auto opacity-100'
+                      : 'h-0 opacity-0 overflow-hidden',
+                  ]"
                 >
-                  <form
-                    class="absolute mb-32 ml-40 bg-blue-600 rounded-md"
-                    @submit.prevent="addChannelToBranch(branch.id)"
+                  <div
+                    class="bg-white p-4 rounded-lg shadow-lg border border-gray-300"
                   >
-                    <input
-                      type="text"
-                      v-model="NameInput"
-                      class="bg-blue-400 m-5 rounded-md"
-                    />
-                    <button class="bg-blue-600 w-14 rounded-md" type="submit">
-                      Create
-                    </button>
-                  </form>
-                </div>
-                <div class="mt-1.5 ml-2">
-                  <h1
-                    v-for="(channel, channelIndex) in branch.channels"
-                    :key="channelIndex"
-                    class="w- rounded-md text-xl text-left font-normal"
-                  >
-                    <div>
+                    <form
+                      class="flex flex-col gap-2"
+                      @submit.prevent="addChannelToBranch(branch.id)"
+                    >
+                      <input
+                        type="text"
+                        v-model="NameInput"
+                        class="bg-blue-400 p-2 rounded-md flex-1 text-sm"
+                        placeholder="Enter channel name"
+                      />
                       <button
-                        class="ml-28"
-                        @click="removeChannel(branch.id, channelIndex)"
+                        class="bg-green-600 text-white px-1 py-2 text-sm rounded-md hover:bg-green-700"
+                        type="submit"
                       >
-                        ❌
+                        Create
                       </button>
-                      <a href="http://"
-                        ><h4
-                          class="text-white font-bold flex-1 truncate max-w-50"
-                        >
-                          ✉️ {{ channel.name }}
-                        </h4>
+                    </form>
+                  </div>
+                </div>
+                <div class="mt-2 ml-2">
+                  <h1
+                    v-for="(channel, Index) in branch.channels"
+                    :key="Index"
+                    class="w-full text-left"
+                  >
+                    <div
+                      class="flex items-center justify-between bg-blue-600 p-2 rounded-md"
+                    >
+                      <a
+                        href="http://"
+                        class="text-white font-bold flex-1 truncate max-w-50"
+                      >
+                        ✉️ {{ channel.name }}
                       </a>
+                      <details class="dropdown">
+                        <summary class="btn m-1">option</summary>
+                        <ul
+                          class="menu dropdown-content bg-base-100 rounded-box z-[1] w-20 p-2 shadow bg-blue-600"
+                          >
+                            <li>
+                              <button
+                                class="hover:text-red-500"
+                                @click="removeChannel(branch.id, Index)"
+                                >Delete
+                              </button>
+                            </li>
+                            
+                            <li>
+                              <button 
+                              class="" 
+                              @click="EditChannel">
+                              Edit                                                         
+                              </button>
+                            </li>
+                            </ul>
+                            <div
+                             v-show="formEdit"
+                             class="absolute top-full left-0 p-4 mt-2 w-56 bg-blue-700 rounded-lg shadow-lg transition-all duration-300 ease-in-out opacity-0 invisible"
+                             :class="{'opacity-100 visible': formEdit}">
+                        
+                        <input type="text" 
+                        class="w-full p-2 mb-2 bg-blue-600 text-white rounded-md" 
+                        placeholder="Channel name"  
+                        v-model="newChannelName">
+                          <button class="mr-22" @click="saveEditChannel(branch.id,Index)">
+                            Save</button>
+                          <button @click="cancelEdit">Cancel</button>
+                      </div>
+                            
+                      </details>
+                      
+                      
+
+                      
                     </div>
                   </h1>
                 </div>
@@ -438,37 +504,63 @@ const showButton = () => {
                     class="p-1 text-white rounded-lg break-words text-start max-w-[90%] mx-10 my-2 overflow-wrap-break-word"
                   >
                     <div>
-                      <div class="grid grid-cols-[80px_auto] w-[100%] text-wrap">
-                      <div class="avatar px-1">
-                        <div class="w-[56px] h-[56px] rounded overflow-hidden">
-                          <img
-                            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                            alt="avatar"
-                          />
-                        </div>
-                      </div>
-                      <div class="grid grid-rows-[30px]">
-                        <div class="grid grid-cols-[220px_200px_30px_auto]">
-                          <h3 class="text-gray-700 font-bold text-lg">
-                            Mr.Napat Chumtham.
-                          </h3>
-                          <span class="text-gray-500 flex text-base">{{
-                            message.time
-                          }}</span>
-                          <button v-on:click="showDialogManage(message)" class="flex justify-start items-start cursor-pointer">
-                            <img src="https://img.icons8.com/?size=100&id=42490&format=png&color=000000" alt="" width="20px">
-                          </button>
-                          <div v-show="selectedMessage == message" class="grid grid-rows-3">
-                            <button v-on:click="deleteMessage(message)" class="text-black">delete</button>
-                            <button class="text-black">edit</button>
-                            <button v-on:click="pinedMessage(message)"class="text-black">pin</button>
+                      <div
+                        class="grid grid-cols-[80px_auto] w-[100%] text-wrap"
+                      >
+                        <div class="avatar px-1">
+                          <div
+                            class="w-[56px] h-[56px] rounded overflow-hidden"
+                          >
+                            <img
+                              src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                              alt="avatar"
+                            />
                           </div>
                         </div>
-                        <p class="text-gray-700 break-words whitespace-normal">
-                          {{ message.message }}
-                        </p>
+                        <div class="grid grid-rows-[30px]">
+                          <div class="grid grid-cols-[220px_200px_30px_auto]">
+                            <h3 class="text-gray-700 font-bold text-lg">
+                              Mr.Napat Chumtham.
+                            </h3>
+                            <span class="text-gray-500 flex text-base">{{
+                              message.time
+                            }}</span>
+                            <button
+                              v-on:click="showDialogManage(message)"
+                              class="flex justify-start items-start cursor-pointer"
+                            >
+                              <img
+                                src="https://img.icons8.com/?size=100&id=42490&format=png&color=000000"
+                                alt=""
+                                width="20px"
+                              />
+                            </button>
+                            <div
+                              v-show="selectedMessage == message"
+                              class="grid grid-rows-3"
+                            >
+                              <button
+                                v-on:click="deleteMessage(message)"
+                                class="text-black"
+                              >
+                                delete
+                              </button>
+                              <button class="text-black">edit</button>
+                              <button
+                                v-on:click="pinedMessage(message)"
+                                class="text-black"
+                              >
+                                pin
+                              </button>
+                            </div>
+                          </div>
+                          <p
+                            class="text-gray-700 break-words whitespace-normal"
+                          >
+                            {{ message.message }}
+                          </p>
+                        </div>
                       </div>
-                    </div>
                     </div>
                   </div>
                 </div>
@@ -489,12 +581,10 @@ const showButton = () => {
       </div>
     </div>
   </div>
-
-
 </template>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 body {
   font-family: "Montserrat", serif;
 }
