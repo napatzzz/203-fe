@@ -157,6 +157,10 @@ const removeChannel = (branchId, channelIndex) => {
     findBranch.channels.splice(channelIndex, 1);
   }
 };
+const hiddenButton = ref(false)
+const showButton = () => {
+  hiddenButton.value =! hiddenButton.value
+}
 </script>
 
 <template>
@@ -192,7 +196,12 @@ const removeChannel = (branchId, channelIndex) => {
                     </h3>
                     <!-- ส่วนไอคอน ✅ ❌ -->
                     <div class="flex space-x-2 shrink-0">
-                      <button
+                      <div> 
+                        <button @click="showButton">
+                          <img src="" alt="">x
+                        </button>
+                        <div v-if="hiddenButton">
+                          <button
                         @click="CreateChannel(branch.id)"
                         class="text-green-500 hover:text-green-700"
                       >
@@ -204,6 +213,8 @@ const removeChannel = (branchId, channelIndex) => {
                       >
                         ❌
                       </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
