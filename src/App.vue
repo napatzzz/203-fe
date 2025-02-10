@@ -149,18 +149,25 @@ const notify = ref([]);
 const visible = ref(false);
 const formEdit = ref(false)
 const newChannelName = ref("")
-// const addNotification = () => {
-//   const message = ["Eve", "Fiona", "God", "Louis", "Ball", "Sharon", "Richard"];
-//   notify.value.push(...message);
-// };
+const showFormPost = ref(false);
+const userName = ref('');
+const messageForm = ref('');
+
+const submit = () => {
+  if(userName.value.trim() && messageForm.value.trim()){
+    notify.value.unshift({
+      user:userName.value,
+      content:messageForm.value,
+      times:new Date().toLocaleString()
+    })
+  }
+}
+
+const toggleShowForm =()=>{
+  showFormPost.value =! showFormPost.value
+}
 
 const toggleNotifications = () => {
-  if (!visible.value) {
-    if (notify.value.length === 0) {
-      addNotification();
-    }
-  }
-
   visible.value = !visible.value;
 };
 const removeNotification = (index) => {
@@ -364,22 +371,42 @@ const showButton = () => {
               <div
                 class="absolute top-9 right-25 flex items-center rounded bg-blue-500 py-1 px-1.5 border border-transparent text-center text-sm text-white transition-all shadow-sm hover:shadow focus:shadow-none hover:bg-slate-700 active:shadow-none disabled:opacity-50"
                 @click="toggleNotifications">
-                Notification
+                Announcement
               </div>
+              <div v-if="showFormPost" class="absolute right-76 top-32 w-64 bg-blue-500 z-10 shadow-lg rounded-lg border border-gray-200 p-4">
+              <h3 class="text-lg font-semibold mb-2 text-white">important</h3>
+              <input v-model="userName" type="text" placeholder="username" class="w-full p-2 border rounded-md mb-2 bg-white" >
+              <textarea v-model="messageForm"  placeholder="message" class="w-full p-2 border rounded-md mb-2 bg-white"></textarea>
+              <button @click="submit" class="bg-green-500 text-white py-1 px-3 rounded-md ">submit</button>
+            </div>
               <div v-if="visible"
                 class="absolute right-4 top-20 w-64 bg-blue-500 z-10 shadow-lg rounded-lg border border-gray-200">
                 <div class="p-4 h-[400px] overflow-y-auto flex flex-col gap-3">
+                  <button @click="toggleShowForm" class="bg-red-500 text-white py-2 rounded-md mb-1 font-bold hover:bg-red-600 ">
+                  Post
+                  </button>
                   <div v-for="(message, index_notify) in notify" :key="index_notify"
                     class="relative flex items-center bg-gray-100 shadow-md rounded-md">
                     <div class="flex items-center p-2">
                       <img class="object-cover w-10 h-10 rounded-lg"
                         src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" alt="avatar" />
                       <div class="ml-3 overflow-hidden">
-                        <h3 class="font-semibold text-lg text-gray-800">
-                          {{ message }}
+                        <h3
+                          class="font-semibold text-lg text-red-500 truncate w-40"
+                        >
+                          {{ message.user }}
                         </h3>
+                        <p class="text-sm text-gray-900 w-40 truncate">
+                          {{ message.content }}
+                        </p>
                         <p class="text-sm text-gray-500">
-                          Lorem ipsum dolor sit love is my bro.
+                          {{ message.times }}
+                        </p>
+                        <p class="text-sm text-gray-900 truncate">
+                          {{ message.message }}
+                        </p>
+                        <p class="text-sm text-gray-500">
+                          {{ message.time }}
                         </p>
                       </div>
                     </div>
