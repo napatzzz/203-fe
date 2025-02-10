@@ -17,7 +17,7 @@
     "@tailwindcss/vite": "^4.0.0",
     "@vitejs/plugin-vue": "^5.2.1",
     "autoprefixer": "^10.4.20",
-    "daisyui": "^4.12.23",
+    "daisyui": "^5.0.0-beta.7",
     "postcss": "^8.5.1",
     "tailwindcss": "^4.0.0",
     "vite": "^6.0.5",
