@@ -234,20 +234,41 @@ const showEditAndDeleteButton = (branchId, Index) => {
 
 const hiddenButton = ref(false);
 
-const showButton = () => {
-  hiddenButton.value = !hiddenButton.value;
+const showButton = (branchId) => {
+  const findOfBranch = branchs.value.find((branch) => branch.id === branchId);
+  if (findOfBranch) {
+    hiddenButton.value = !hiddenButton.value;
+  }
+  
 };
 const hideEditBranchName = ref(false);
-const selectedBranchId = ref(null);
 const newBranchName = ref("");
 const newBranchInfo = ref("");
 
-const showEditBranchName = () => {
+const showEditBranchName = (branchId) => {
   hideEditBranchName.value = !hideEditBranchName.value;
 };
 
-const newInputBranch = "";
-const editNewBranch = () => {};
+
+const editNewBranch = (branchId) => {
+  
+  console.log("Editing branch with ID:", branchId);
+  const findOfBranch = branchs.value.find((branch) => branch.id === branchId);
+
+  if (findOfBranch) {
+    console.log("Branch found:", findOfBranch.value);
+
+    if (newBranchName.value.trim()) {
+      findOfBranch.bname = newBranchName.value.trim();
+    }
+    if (newBranchInfo.value.trim()) {
+      findOfBranch.binfo = newBranchInfo.value.trim();
+    }
+  } 
+  hideEditBranchName.value = !hideEditBranchName.value;
+
+  console.log("Updated Branch:", findOfBranch);
+};
 </script>
 
 <template>
@@ -284,7 +305,7 @@ const editNewBranch = () => {};
                   <!-- ส่วนไอคอน ✅ ❌ -->
                   <div class="flex shrink-0 relative">
                     <div>
-                      <button @click="showButton">
+                      <button @click="showButton(branch.id)">
                         <svg
                           class="swap-off fill-current"
                           xmlns="http://www.w3.org/2000/svg"
@@ -316,7 +337,7 @@ const editNewBranch = () => {};
                           >
                             Delete
                           </button>
-                          <button @click="showEditBranchName" class="text-left">
+                          <button @click="showEditBranchName(branchId)" class="text-left">
                             Edit
                           </button>
                         </div>
@@ -433,7 +454,7 @@ const editNewBranch = () => {};
                         <div class="w-50 p-3">
                           <input
                             type="text"
-                            class="w-full p-2 mb-2  bg-blue-600 text-white rounded-md"
+                            class="w-full p-2 mb-2 bg-blue-600 text-white rounded-md"
                             placeholder="Channel name"
                             v-model="newChannelName"
                           />
@@ -445,7 +466,7 @@ const editNewBranch = () => {};
                           </button>
                           <button
                             @click="cancelEdit(branch.id, Index)"
-                            class="hover:text-red-500 "
+                            class="hover:text-red-500"
                           >
                             Cancel
                           </button>
@@ -674,7 +695,8 @@ const editNewBranch = () => {};
                   </div>
                 </div>
                 <!-- แก้Branch -->
-                <div v-if="hideEditBranchName">
+                <div v-if="hideEditBranchName" v-for="branch in branchs"
+                :key="branch.id">
                   <div
                     class="bg-blue-800 p-6 rounded-lg shadow-lg max-w-md mx-auto"
                   >
@@ -698,10 +720,10 @@ const editNewBranch = () => {};
                         Cancel
                       </button>
                       <button
-                        @click="editNewBranch"
+                        @click="editNewBranch(branch.id)"
                         class="bg-green-500 hover:bg-green-400 text-white px-4 py-2 rounded shadow"
                       >
-                        Create
+                        Save
                       </button>
                     </div>
                   </div>
