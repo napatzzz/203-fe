@@ -182,7 +182,6 @@ const removeNotification = (index) => {
   notify.value.splice(index, 1);
 };
 
-
 const removeBranch = (branchId) => {
   branchs.value = branchs.value.filter((branch) => branch.id !== branchId);
 };
@@ -264,193 +263,189 @@ const editNewBranch = () => {};
           </button>
         </div>
 
-        <div class="flex-1 bg-blue-700 w-full">
+        <div class="flex-1 bg-blue-700 w-full h-[51.2rem] overflow-y-auto">
           <h1 class="text-2xl font-bold mb-6 ml-5 mt-4 tracking-wide">
             DailyWorks
           </h1>
-
-          <div class="w-full">
-            <div
-              v-for="branch in branchs"
-              :key="branch.id"
-              class="p-3 mb-2 bg-blue-700 rounded-md text-center cursor-pointer hover:bg-blue-600 transition relative"
-            >
-              <div>
-                <div class="p-2 space-y-2">
-                  <div
-                    class="flex items-center px-3 py-2 bg-blue-600 rounded-lg"
+          <div
+            v-for="branch in branchs"
+            :key="branch.id"
+            class="p-3 mb-2 bg-blue-700 rounded-md text-center cursor-pointer hover:bg-blue-600 relative"
+          >
+            <div class="">
+              <div class="space-y-2">
+                <div class="flex items-center bg-blue-600 rounded-lg">
+                  <!-- ส่วนชื่อ Branch -->
+                  <h3
+                    class="text-white font-bold text-left pl-3 flex-1 max-w-[80%] truncate"
                   >
-                    <!-- ส่วนชื่อ Branch -->
-                    <h3
-                      class="text-white font-bold flex-1 max-w-[80%] truncate"
-                    >
-                      {{ branch.bname }}
-                    </h3>
-                    <!-- ส่วนไอคอน ✅ ❌ -->
-                    <div class="flex space-x-2 shrink-0">
-                      <div>
-                        <button @click="showButton">
-                          <svg
-                            class="swap-off fill-current"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="32"
-                            height="32"
-                            viewBox="0 0 512 512"
-                          >
-                            <path
-                              d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"
-                            />
-                          </svg>
-                        </button>
-                        <div
-                          v-if="hiddenButton"
-                          class="absolute top-0 left-full mt-2 w-32 bg-blue-700 text-white rounded-lg shadow-lg z-10"
+                    {{ branch.bname }}
+                  </h3>
+                  <!-- ส่วนไอคอน ✅ ❌ -->
+                  <div class="flex shrink-0 relative">
+                    <div>
+                      <button @click="showButton">
+                        <svg
+                          class="swap-off fill-current"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="32"
+                          height="32"
+                          viewBox="0 0 512 512"
                         >
-                          <ul
-                            class="menu text-white dropdown-content bg-base-100 rounded-box w-full p-2 shadow bg-blue-700"
+                          <path
+                            d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"
+                          />
+                        </svg>
+                      </button>
+                      <div
+                        v-if="hiddenButton"
+                        class="absolute top-7.5 w-20 right-[-1px] text-white shadow-lg z-50"
+                      >
+                        <div
+                          class="menu px-2 py-3 text-sm rounded-lg grid text-white gap-0 dropdown-content w-full shadow bg-blue-700"
+                        >
+                          <button
+                            @click="CreateChannel(branch.id)"
+                            class="hover:text-green-500 text-left"
                           >
-                            <button
-                              @click="CreateChannel(branch.id)"
-                              class="hover:text-green-700"
-                            >
-                              Create Channel
-                            </button>
-                            <button
-                              @click="removeBranch(branch.id)"
-                              class="hover:text-red-700"
-                            >
-                              Delete Channel
-                            </button>
-                            <button
-                              @click="showEditBranchName"
-                              class="hover:text-blue-600"
-                            >
-                              Edit
-                            </button>
-                          </ul>
+                            Create
+                          </button>
+                          <button
+                            @click="removeBranch(branch.id)"
+                            class="hover:text-red-500 text-left"
+                          >
+                            Delete
+                          </button>
+                          <button @click="showEditBranchName" class="text-left">
+                            Edit
+                          </button>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+              </div>
 
+              <div
+                v-if="showForm === branch.id"
+                class="fixed top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50"
+                :class="[
+                  'mt-2 bg-blue-500 rounded-md p-4 transition-all',
+                  showForm === branch.id ? 'opacity-100' : 'opacity-0',
+                ]"
+              >
                 <div
-                  v-if="showForm === branch.id"
-                  class="fixed top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50"
-                  :class="[
-                    'mt-2 bg-blue-500 rounded-md p-4 transition-all',
-                    showForm === branch.id ? 'opacity-100' : 'opacity-0',
-                  ]"
+                  class="bg-white p-4 rounded-lg shadow-lg border border-gray-300 w-96"
                 >
-                  <div
-                    class="bg-white p-4 rounded-lg shadow-lg border border-gray-300 w-96"
+                  <form
+                    class="flex flex-col gap-2"
+                    @submit.prevent="addChannelToBranch(branch.id)"
                   >
-                    <form
-                      class="flex flex-col gap-2"
-                      @submit.prevent="addChannelToBranch(branch.id)"
-                    >
-                      <input
-                        type="text"
-                        v-model="NameInput"
-                        class="bg-blue-400 p-2 rounded-md flex-1 text-sm"
-                        placeholder="Enter channel name"
-                      />
-                      <div class="flex gap-4 mt-4">
-                        <button
-                          class="bg-blue-600 ml-5 text-white px-1 py-2 text-sm rounded-md hover:text-green-500"
-                          type="submit"
-                        >
-                          Create
-                        </button>
-                        <button
-                          @click="cancelCreateChannel()"
-                          class="bg-blue-600 ml-46 text-white px-1 py-2 text-sm rounded-md hover:text-red-700"
-                        >
-                          Cancle
-                        </button>
-                      </div>
-                    </form>
-                  </div>
+                    <input
+                      type="text"
+                      v-model="NameInput"
+                      class="bg-blue-400 p-2 rounded-md flex-1 text-sm"
+                      placeholder="Enter channel name"
+                    />
+                    <div class="flex gap-4 mt-4">
+                      <button
+                        class="bg-blue-600 ml-5 text-white px-1 py-2 text-sm rounded-md hover:text-green-500"
+                        type="submit"
+                      >
+                        Create
+                      </button>
+                      <button
+                        @click="cancelCreateChannel()"
+                        class="bg-blue-600 ml-46 text-white px-1 py-2 text-sm rounded-md hover:text-red-700"
+                      >
+                        Cancle
+                      </button>
+                    </div>
+                  </form>
                 </div>
               </div>
-              <div class="mt-2 ml-2">
-                <h1
-                  v-for="(channel, Index) in branch.channels"
-                  :key="Index"
-                  class="w-full text-left"
+            </div>
+            <div class="mt-2 ml-2">
+              <div
+                v-for="(channel, Index) in branch.channels"
+                :key="Index"
+                class="w-full text-left"
+              >
+                <div
+                  class="flex items-center mt-2 justify-between bg-blue-600 p-1 rounded-md relative"
                 >
-                  <div
-                    class="flex items-center mt-2 justify-between bg-blue-600 p-1 rounded-md relative"
+                  <a
+                    href="http://"
+                    class="text-white font-bold flex-1 truncate max-w-full"
                   >
-                    <a
-                      href="http://"
-                      class="text-white font-bold flex-1 truncate max-w-full"
-                    >
-                      ✉️ {{ channel.name }}
-                    </a>
-                    <div class="flex shrink-0 relative">
-                      <div class="relative">
-                        <button
-                          @click="showEditAndDeleteButton(branch.id, Index)"
+                    ✉️ {{ channel.name }}
+                  </a>
+                  <div class="flex shrink-0 relative">
+                    <div class="relative">
+                      <button
+                        @click="showEditAndDeleteButton(branch.id, Index)"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="size-6"
                         >
-                          <!-- Hamburger Icon -->
-                          <svg
-                            class="swap-off fill-current"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="32"
-                            height="32"
-                            viewBox="0 0 512 512"
-                          >
-                            <path
-                              d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"
-                            />
-                          </svg>
-                        </button>
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
+                          />
+                        </svg>
+                      </button>
+                      <div
+                        v-show="branch.channels[Index].showEditAndDelete"
+                        class="absolute top-7.5 w-16 right-[-1px] text-white shadow-lg z-40"
+                      >
                         <div
-                          v-show="branch.channels[Index].showEditAndDelete"
-                          class="absolute top-0 mt-2 ml-12 w-32 bg-blue-700 text-white rounded-lg shadow-lg z-50"
+                          class="menu px-2 py-4 text-sm rounded-lg grid text-white gap-0 dropdown-content w-full shadow bg-blue-700"
                         >
-                          <ul
-                            class="menu absolute text-white dropdown-content bg-base-100 rounded-box w-full p-2 shadow bg-blue-700 z-50"
+                          <button
+                            class="hover:text-red-500 text-left"
+                            @click="removeChannel(branch.id, Index)"
                           >
-                            <li>
-                              <button
-                                class="hover:text-red-500"
-                                @click="removeChannel(branch.id, Index)"
-                              >
-                                Delete
-                              </button>
-                            </li>
-                            <li>
-                              <button @click="EditChannel(branch.id, Index)">
-                                Edit
-                              </button>
-                            </li>
-                          </ul>
+                            Delete
+                          </button>
+
+                          <button
+                            @click="EditChannel(branch.id, Index)"
+                            class="hover:text-green-500 text-left"
+                          >
+                            Edit
+                          </button>
                         </div>
-                        <div
-                          v-show="branch.channels[Index].formEdit"
-                          class="absolute top-full left-40 p-4 w-70 bg-blue-700 rounded-lg shadow-lg transition-all duration-300 ease-in-out opacity-0 invisible"
-                          :class="{
-                            'opacity-100 visible':
-                              branch.channels[Index].formEdit,
-                          }"
-                        >
+                      </div>
+                      <div
+                        v-show="branch.channels[Index].formEdit"
+                        class="absolute z-50 right-1 bg-blue-800 rounded-lg"
+                        :class="{
+                          'opacity-100 visible':
+                            branch.channels[Index].formEdit,
+                        }"
+                      >
+                        <div class="w-50 p-3">
                           <input
                             type="text"
-                            class="w-full p-2 mb-2 bg-blue-600 text-white rounded-md"
+                            class="w-full p-2 mb-2  bg-blue-600 text-white rounded-md"
                             placeholder="Channel name"
                             v-model="newChannelName"
                           />
                           <button
-                            class="mr-32 ml-3 hover:text-green-400"
+                            class="hover:text-green-400 mr-20"
                             @click="saveEditChannel(branch.id, Index)"
                           >
                             Save
                           </button>
                           <button
                             @click="cancelEdit(branch.id, Index)"
-                            class="hover:text-red-500"
+                            class="hover:text-red-500 "
                           >
                             Cancel
                           </button>
@@ -458,7 +453,7 @@ const editNewBranch = () => {};
                       </div>
                     </div>
                   </div>
-                </h1>
+                </div>
               </div>
             </div>
           </div>
