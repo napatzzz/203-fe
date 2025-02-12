@@ -263,7 +263,7 @@ const editNewBranch = () => {};
           </button>
         </div>
 
-        <div class="flex-1 bg-blue-700 w-full h-[51.2rem] overflow-y-auto">
+        <div class="flex-1 bg-blue-700 w-full h-screen overflow-y-auto">
           <h1 class="text-2xl font-bold mb-6 ml-5 mt-4 tracking-wide">
             DailyWorks
           </h1>
