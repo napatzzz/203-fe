@@ -6,7 +6,21 @@ const searchParam = ref("");
 const messageTemp = ref([]);
 const selectedMessage = ref("");
 const selectReply = ref("");
+const selectChat = ref("Welcome Dailyworks")
+const selectBranch = ref('');
 const reply = ref("");
+
+const selectedBranch = (branch) => {
+  if (selectBranch.value === branch) {
+    selectBranch.value = "";
+  } else {
+    selectBranch.value = branch;
+  }
+}
+
+const selectedChat = (chat) => {
+  return selectChat.value = chat
+}
 
 const sendReply = (messageParam) => {
   if (
@@ -40,6 +54,7 @@ const deleteMessage = (messageDialog) => {
 
 const pinedMessage = (messageDialog) => {
   notify.value.push(messageDialog);
+  selectedMessage.value = ""
 };
 
 const sendMessage = () => {
@@ -48,6 +63,7 @@ const sendMessage = () => {
       message: message.value,
       time: new Date().toLocaleString(),
       replys: [],
+      channel: `${selectChat.value}`
     };
     messageToSend.value.push(newMessage);
     messageTemp.value.push(newMessage);
@@ -84,11 +100,11 @@ const closeInputContainer = () => {
   input.value = null;
 };
 
-let id = 0;
+let id = 2;
 const branchs = ref([]);
 
 branchs.value[0] = {
-  id: 999,
+  id: 1,
   bname: "Welcome DailyWorks",
   binfo: "",
   channels: [
@@ -104,7 +120,6 @@ const inputBranch = ref("");
 const inputInfo = ref("");
 const input = ref(null);
 
-//ใช้.trimเพื่อป้องกันการกดspacebarมาแล้วกดcreate
 const createBranch = () => {
   if (!inputBranch.value.trim()) {
     alert("Branch Name Can't be Null");
@@ -117,8 +132,6 @@ const createBranch = () => {
     binfo: inputInfo.value,
     channels: [],
   };
-
-  console.log(newBranch);
 
   branchs.value.push(newBranch);
   inputBranch.value = "";
@@ -232,15 +245,7 @@ const showEditAndDeleteButton = (branchId, Index) => {
   }
 };
 
-const hiddenButton = ref(false);
 
-const showButton = (branchId) => {
-  const findOfBranch = branchs.value.find((branch) => branch.id === branchId);
-  if (findOfBranch) {
-    hiddenButton.value = !hiddenButton.value;
-  }
-  
-};
 const hideEditBranchName = ref(false);
 const newBranchName = ref("");
 const newBranchInfo = ref("");
@@ -296,16 +301,14 @@ const editNewBranch = (branchId) => {
             <div class="">
               <div class="space-y-2">
                 <div class="flex items-center bg-blue-600 rounded-lg">
-                  <!-- ส่วนชื่อ Branch -->
                   <h3
                     class="text-white font-bold text-left pl-3 flex-1 max-w-[80%] truncate"
                   >
                     {{ branch.bname }}
                   </h3>
-                  <!-- ส่วนไอคอน ✅ ❌ -->
-                  <div class="flex shrink-0 relative">
+                  <div class="flex flex-col">
                     <div>
-                      <button @click="showButton(branch.id)">
+                      <button class="flex justify-center items-end pl-3" @click="selectedBranch(branch.bname)">
                         <svg
                           class="swap-off fill-current"
                           xmlns="http://www.w3.org/2000/svg"
@@ -319,7 +322,7 @@ const editNewBranch = (branchId) => {
                         </svg>
                       </button>
                       <div
-                        v-if="hiddenButton"
+                        v-if="selectBranch === branch.bname"
                         class="absolute top-7.5 w-20 right-[-1px] text-white shadow-lg z-50"
                       >
                         <div
@@ -390,19 +393,18 @@ const editNewBranch = (branchId) => {
               <div
                 v-for="(channel, Index) in branch.channels"
                 :key="Index"
-                class="w-full text-left"
+                class="w-full "
               >
                 <div
-                  class="flex items-center mt-2 justify-between bg-blue-600 p-1 rounded-md relative"
+                  class="flex items-center justify-start mt-2  bg-blue-600 p-1 rounded-md relative"
                 >
-                  <a
-                    href="http://"
-                    class="text-white font-bold flex-1 truncate max-w-full"
+                  <button @click="selectedChat(channel.name)"
+                    class="text-white text-left font-bold flex-1 truncate max-w-full pl-2"
                   >
                     ✉️ {{ channel.name }}
-                  </a>
-                  <div class="flex shrink-0 relative">
-                    <div class="relative">
+                  </button>
+                  <div class="flex flex-col ">
+                    <div class="relative flex justify-center">
                       <button
                         @click="showEditAndDeleteButton(branch.id, Index)"
                       >
@@ -479,18 +481,7 @@ const editNewBranch = (branchId) => {
             </div>
           </div>
         </div>
-        <!-- เก็บไว้ก่อนค่อยใช้ -->
-        <!-- <div class="w-1/4 bg-blue-800 p-4">
-    <h1 class="text-center text-xl font-bold mb-4">Announcements</h1>
-    <ul class="space-y-4">
-      <li 
-        v-for="branch in branchs" 
-        :key="branch.id" 
-        class="p-4 bg-blue-700 rounded shadow">
-        Announcement for {{ branch.bname }}
-      </li>
-    </ul>
-  </div> -->
+
       </div>
     </div>
     <div class="bg-gray-50 h-[100%]">
@@ -502,7 +493,7 @@ const editNewBranch = (branchId) => {
                 <h1
                   class="font-bold text-2xl text-gray-500 flex self-center mt-3"
                 >
-                  {{ branchs[0].channels[0].name }}
+                  {{ selectChat }}
                 </h1>
                 <p class="flex self-start text-gray-500 -mt-2 text-sm">
                   20 👤 | description for your team....
@@ -585,7 +576,7 @@ const editNewBranch = (branchId) => {
                 v-if="visible"
                 class="absolute right-4 top-20 w-64 bg-blue-500 z-10 shadow-lg rounded-lg border border-gray-200"
               >
-                <div class="p-4 h-[400px] overflow-y-auto flex flex-col gap-3">
+                <div class="p-4 h-[500px] overflow-y-auto flex flex-col gap-3">
                   <button
                     @click="toggleShowForm"
                     class="bg-red-500 text-white py-2 rounded-md mb-1 font-bold hover:bg-red-600"
@@ -727,7 +718,6 @@ const editNewBranch = (branchId) => {
                       </button>
                     </div>
                   </div>
-                  <!-- แก้Branch -->
                 </div>
               </div>
             </div>
@@ -737,9 +727,9 @@ const editNewBranch = (branchId) => {
               <div class="overflow-y-auto h-[600px]">
                 <div class="flex flex-col-reverse justify-end max-w-[90%]">
                   <div
-                    v-for="(message, index) in messageToSend"
+                    v-for="(message, index) in messageToSend.filter(message => message.channel === selectChat)"
                     :key="index"
-                    class="p-1 text-white rounded-lg break-words text-start max-w-[90%] mx-10 my-2 overflow-wrap-break-word"
+                    class=" text-white rounded-lg break-words text-start max-w-[90%] mx-10 my-2 overflow-wrap-break-word hover:bg-gray-100 p-3 "
                   >
                     <div>
                       <div
@@ -754,7 +744,7 @@ const editNewBranch = (branchId) => {
                           <div class=""></div>
                         </div>
                         <div class="grid grid-rows-[30px]">
-                          <div class="grid grid-cols-[220px_200px_30px_auto]">
+                          <div class="grid grid-cols-[220px_200px_auto]">
                             <h3 class="text-gray-700 font-bold text-lg">
                               Mr.Napat Chumtham.
                             </h3>
@@ -763,7 +753,7 @@ const editNewBranch = (branchId) => {
                             }}</span>
                             <button
                               v-on:click="showDialogManage(message)"
-                              class="flex justify-start items-start cursor-pointer"
+                              class="flex justify-end items-start cursor-pointer relative z"
                             >
                               <img
                                 src="https://img.icons8.com/?size=100&id=42490&format=png&color=000000"
@@ -773,40 +763,39 @@ const editNewBranch = (branchId) => {
                             </button>
                             <div
                               v-show="selectedMessage == message"
-                              class="grid grid-rows-3"
+                              class="flex flex-col absolute right-25 items-start bg-gray-200 p-2 px-2 rounded-xl"
                             >
                               <button
                                 v-on:click="deleteMessage(message)"
-                                class="text-black"
+                                class="text-white bg-red-500 py-1 px-2 m-1 rounded-lg"
                               >
-                                delete
+                                Delete
                               </button>
-                              <button class="text-black">edit</button>
                               <button
                                 v-on:click="pinedMessage(message)"
-                                class="text-black"
+                                class="text-white bg-blue-500 w-[100%] py-1 px-2 rounded-lg"
                               >
-                                pin
+                                Pin
                               </button>
                             </div>
                           </div>
                           <p
-                            class="p-1 text-gray-700 break-words whitespace-normal mb-4 bg-amber-100"
+                            class="p-2 text-gray-700 break-words whitespace-normal mb-4 bg-amber-100"
                           >
                             {{ message.message }}
                           </p>
 
                           <span
                             v-for="reply in message.replys"
-                            class="text-gray-600 text-sm py-1 flex items-center"
+                            class="text-gray-600 text-md py-1 grid grid-cols-[60px_auto]"
                           >
                             <span class="relative inline-block">
                               <img
                                 src="https://randomuser.me/api/portraits/women/50.jpg"
-                                class="object-cover w-6 h-6 rounded-lg"
+                                class="object-cover w-10 h-10 rounded-lg"
                               />
                             </span>
-                            <span class="px-2 bg-blue-100">{{ reply }}</span>
+                            <span class=" p-2 bg-blue-100">{{ reply }}</span>
                           </span>
                         </div>
                       </div>
@@ -825,21 +814,21 @@ const editNewBranch = (branchId) => {
                         v-show="selectReply !== message"
                         ref="title-reply"
                         @click="inputReply(message)"
-                        class="text-gray-500 text-sm"
+                        class="text-gray-500 text-md p-1"
                       >
-                        reply
+                        Reply
                       </h1>
                       <div
                         v-show="selectReply === message"
                         class="flex flex-row"
                       >
                         <input
-                          class="placeholder:text-slate-600 text-slate-700 text-sm border border-none rounded-md pl-2 pr-28 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300"
+                          class="placeholder:text-slate-600 text-slate-700 text-md border border-none rounded-md pl-2 pr-28 py-1 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300"
                           placeholder="Reply for message"
                           v-model="reply"
                         />
                         <button
-                          class="text-black text-sm bg-amber-200 px-2 rounded-2xl cursor-pointer"
+                          class="text-white text-sm bg-blue-500 px-2 rounded-lg cursor-pointer"
                           @click="sendReply(message)"
                         >
                           send
