@@ -13,8 +13,6 @@ const reply = ref("");
 import {getService} from "./functions/service.js"
 const API_ROOT = import.meta.env.VITE_API_ROOT;
 
-console.log(bu);
-
 
 onBeforeMount(async () => {
   let res = await getService(API_ROOT + "/api/branch/");
