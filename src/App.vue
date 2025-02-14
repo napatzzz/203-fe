@@ -14,7 +14,8 @@ import {getService} from "./functions/service.js"
 const API_ROOT = import.meta.env.VITE_API_ROOT;
 
 onBeforeMount(async () => {
-  let res = await getService(API_ROOT+"/api/branch");
+  let res = await getService(API_ROOT + "/api/branch/");
+  console.log(res.body);
   branchs.value.push(res.body);
 });
 
@@ -312,7 +313,7 @@ const editNewBranch = (branchId) => {
                   <h3
                     class="text-white font-bold text-left pl-3 flex-1 max-w-[80%] truncate"
                   >
-                    {{ branch.bname }}
+                    {{ branch.name }}
                   </h3>
                   <div class="flex flex-col">
                     <div>
