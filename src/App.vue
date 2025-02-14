@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, onBeforeMount } from "vue";
 const messageToSend = ref([]);
 const message = ref("");
 const searchParam = ref("");
@@ -9,6 +9,14 @@ const selectReply = ref("");
 const selectChat = ref("Welcome Dailyworks")
 const selectBranch = ref('');
 const reply = ref("");
+
+import {getService} from "./functions/service.js"
+const API_ROOT = import.meta.env.VITE_API_ROOT;
+
+onBeforeMount(async () => {
+  let res = await getService(API_ROOT+"/api/branch");
+  branchs.value.push(res.body);
+});
 
 const selectedBranch = (branch) => {
   if (selectBranch.value === branch) {
